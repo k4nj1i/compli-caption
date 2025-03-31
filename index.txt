@@ -1,0 +1,166 @@
+!-- index.html --
+!DOCTYPE html
+html lang=en
+head
+  meta charset=UTF-8 
+  meta name=viewport content=width=device-width, initial-scale=1.0
+  titleCompliCaption – Caption Generatortitle
+  script src=httpscdn.tailwindcss.comscript
+head
+body class=bg-gray-50 text-gray-800 font-sans
+  div class=max-w-5xl mx-auto p-6
+    h1 class=text-3xl font-bold text-indigo-600 mb-2CompliCaptionh1
+    p class=mb-6 text-gray-600Create compliant influencer captions, fast.p
+
+    !-- Selection Panel --
+    div class=grid grid-cols-1 mdgrid-cols-3 gap-6
+      div
+        label class=block text-sm font-medium mb-1Platformlabel
+        select id=platform class=w-full p-2 border rounded
+          option value=instagramInstagramoption
+          option value=tiktokTikTokoption
+          option value=youtubeYouTubeoption
+          option value=facebookFacebookoption
+        select
+
+        label class=block text-sm font-medium mt-4 mb-1Relationshiplabel
+        select id=relationship class=w-full p-2 border rounded
+          option value=paidPaid Partnershipoption
+          option value=giftedGiftedoption
+          option value=affiliateAffiliateoption
+        select
+
+        label class=block text-sm font-medium mt-4 mb-1Tonelabel
+        select id=tone class=w-full p-2 border rounded
+          option value=professionalProfessionaloption
+          option value=casualCasualoption
+          option value=enthusiasticEnthusiasticoption
+        select
+
+        button onclick=loadTemplate() class=mt-4 w-full bg-indigo-600 text-white py-2 rounded hoverbg-indigo-700Load Templatebutton
+      div
+
+      !-- Template Preview --
+      div class=mdcol-span-2
+        h2 class=text-lg font-semibold mb-2Customize Your Captionh2
+
+        div id=editor class=space-y-3 hidden
+          input id=brand placeholder=Brand Name class=w-full p-2 border rounded 
+          input id=product placeholder=Product Name class=w-full p-2 border rounded 
+          input id=feature1 placeholder=Feature 1 class=w-full p-2 border rounded 
+          input id=feature2 placeholder=Feature 2 class=w-full p-2 border rounded 
+          textarea id=preview readonly class=w-full p-3 border rounded h-40 bg-gray-100textarea
+
+          div class=flex space-x-3
+            button onclick=copyCaption() class=flex-1 border border-indigo-600 text-indigo-600 py-2 rounded hoverbg-indigo-50Copybutton
+          div
+        div
+
+        div id=empty-state class=text-gray-500 text-sm mt-4Select options and click Load Template to begin.div
+      div
+    div
+
+    !-- Disclosure Tabs --
+    div class=mt-10
+      h3 class=text-lg font-medium mb-3Disclosure Guidelinesh3
+      div class=flex space-x-4 mb-3
+        button onclick=showTab('instagram') class=tab-btn text-sm text-indigo-600 font-mediumInstagrambutton
+        button onclick=showTab('tiktok') class=tab-btn text-sm text-gray-600TikTokbutton
+        button onclick=showTab('youtube') class=tab-btn text-sm text-gray-600YouTubebutton
+      div
+
+      div id=tab-instagram class=tab-content text-sm text-gray-700
+        ul class=list-disc ml-5 space-y-1
+          liDisclose at the beginning of the caption.li
+          liUse #ad, #sponsored, or “Paid partnership with...”li
+          liUse Instagram’s paid tag when available.li
+        ul
+      div
+      div id=tab-tiktok class=tab-content hidden text-sm text-gray-700
+        ul class=list-disc ml-5 space-y-1
+          liInclude verbal disclosure in the first 5–10 seconds.li
+          liUse branded content toggle + hashtags like #ad.li
+        ul
+      div
+      div id=tab-youtube class=tab-content hidden text-sm text-gray-700
+        ul class=list-disc ml-5 space-y-1
+          liVerbal disclosure at the start of video.li
+          liWritten disclosure in description box.li
+        ul
+      div
+    div
+
+    !-- Footer --
+    div class=mt-12 text-center text-gray-400 text-xs
+      Built by Steven Colvert · CompliCaption © 2025
+    div
+  div
+
+  !-- Toast --
+  div id=toast class=fixed bottom-5 right-5 bg-green-600 text-white py-2 px-4 rounded shadow opacity-0 transition-all duration-300
+    Caption copied to clipboard!
+  div
+
+  script
+    const templates = {
+      instagram {
+        paid {
+          professional #Ad I'm excited to partner with [BRAND] on their new [PRODUCT]. It's all about [FEATURE1] and [FEATURE2].,
+          casual #ad Just got this [PRODUCT] from [BRAND] — so [FEATURE1]! Loving it for [FEATURE2]!,
+          enthusiastic OMG [PRODUCT] from [BRAND] is everything! [FEATURE1] + [FEATURE2] = ❤️ #gifted
+        },
+        gifted {
+          enthusiastic Huge thanks to [BRAND] for sending me their [PRODUCT] 🙌 It's [FEATURE1] and perfect for [FEATURE2]! #gifted
+        },
+        affiliate {
+          professional This post contains affiliate links. [PRODUCT] by [BRAND] is amazing — [FEATURE1] and [FEATURE2]. #affiliate
+        }
+      }
+    };
+
+    function loadTemplate() {
+      const p = document.getElementById(platform).value;
+      const r = document.getElementById(relationship).value;
+      const t = document.getElementById(tone).value;
+
+      const template = templates[p].[r].[t];
+      if (!template) return alert(No template found for this combo.);
+
+      document.getElementById(editor).classList.remove(hidden);
+      document.getElementById(empty-state).classList.add(hidden);
+
+      document.getElementById(preview).value = template
+        .replace([BRAND], document.getElementById(brand).value  [Brand])
+        .replace([PRODUCT], document.getElementById(product).value  [Product])
+        .replace([FEATURE1], document.getElementById(feature1).value  [Feature 1])
+        .replace([FEATURE2], document.getElementById(feature2).value  [Feature 2]);
+
+       Add listeners
+      document.querySelectorAll(#brand, #product, #feature1, #feature2).forEach(input = {
+        input.addEventListener(input, () = {
+          loadTemplate();  Re-render
+        });
+      });
+    }
+
+    function copyCaption() {
+      const text = document.getElementById(preview).value;
+      navigator.clipboard.writeText(text);
+      const toast = document.getElementById(toast);
+      toast.classList.remove(opacity-0);
+      setTimeout(() = toast.classList.add(opacity-0), 2000);
+    }
+
+    function showTab(name) {
+      document.querySelectorAll(.tab-btn).forEach(btn = {
+        btn.classList.remove(text-indigo-600, font-medium);
+        btn.classList.add(text-gray-600);
+      });
+      document.querySelector(`[onclick=showTab('${name}')]`).classList.add(text-indigo-600, font-medium);
+
+      document.querySelectorAll(.tab-content).forEach(tab = tab.classList.add(hidden));
+      document.getElementById(`tab-${name}`).classList.remove(hidden);
+    }
+  script
+body
+html
