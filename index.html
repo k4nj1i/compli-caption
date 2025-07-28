@@ -90,6 +90,12 @@
       </div>
     </div>
 
+    <!-- Recent Captions -->
+    <div class="mt-8">
+      <h2 class="text-lg font-semibold mb-2">Recent Captions</h2>
+      <ul id="recent-list" class="list-disc pl-5 space-y-1 text-sm text-gray-700"></ul>
+    </div>
+
     <!-- Footer -->
     <div class="mt-12 text-center text-gray-400 text-xs">
       Built by Steven Colvert · CompliCaption © 2025
@@ -149,7 +155,35 @@
       const toast = document.getElementById("toast");
       toast.classList.remove("opacity-0");
       setTimeout(() => toast.classList.add("opacity-0"), 2000);
+      saveRecent(text);
     }
+
+    function saveRecent(text) {
+      let recent = [];
+      try {
+        recent = JSON.parse(localStorage.getItem("recentCaptions")) || [];
+      } catch {}
+      recent.unshift(text);
+      recent = recent.slice(0, 5);
+      localStorage.setItem("recentCaptions", JSON.stringify(recent));
+      renderRecent();
+    }
+
+    function renderRecent() {
+      let recent = [];
+      try {
+        recent = JSON.parse(localStorage.getItem("recentCaptions")) || [];
+      } catch {}
+      const list = document.getElementById("recent-list");
+      while (list.firstChild) list.removeChild(list.firstChild);
+      recent.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        list.appendChild(li);
+      });
+    }
+
+    renderRecent();
 
     function showTab(name) {
       document.querySelectorAll(".tab-btn").forEach(btn => {
