@@ -136,11 +136,16 @@
         .replace("[FEATURE2]", document.getElementById("feature2").value || "[Feature 2]");
 
       // Add listeners
-      document.querySelectorAll("#brand, #product, #feature1, #feature2").forEach(input => {
-        input.addEventListener("input", () => {
-          loadTemplate(); // Re-render
-        });
-      });
+      if (!window._listenersAdded) {
+        document
+          .querySelectorAll("#brand, #product, #feature1, #feature2")
+          .forEach((input) => {
+            input.addEventListener("input", () => {
+              loadTemplate(); // Re-render
+            });
+          });
+        window._listenersAdded = true;
+      }
     }
 
     function copyCaption() {
